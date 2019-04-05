@@ -1,0 +1,39 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:util="http://www.springframework.org/schema/util"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/util
+ 	http://www.springframework.org/schema/util/spring-util.xsd">
+ 	
+	<context:property-placeholder location="classpath:myProperties2.properties"/>
+	<context:component-scan base-package="com.capgemini.spring"/>
+
+
+	<util:map id="map" map-class="java.util.HashMap">
+		<entry key="johnson" value="Mumbai"/>
+		<entry key="Taylor" value="Pune"/>
+ 	</util:map>
+
+ 	<util:set id="set" set-class="java.util.HashSet">
+ 		<value>Mumbai</value>
+ 		<value>Pune</value>	
+	</util:set>
+
+ 	<util:list id="list" list-class="java.util.ArrayList">
+ 		<value>Anna</value>
+		<value>John Doe</value>
+ 	</util:list>
+
+	<util:properties id="ipAddress">
+ 		<prop key="IP_Address">${ipAddress}</prop>
+ 	</util:properties>
+
+	<util:properties id="database">
+ 		<prop key="username">${userName}</prop>
+		<prop key="password">${password}</prop>
+ 	</util:properties>
+	
+</beans>
