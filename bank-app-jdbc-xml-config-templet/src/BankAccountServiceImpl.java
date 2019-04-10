@@ -13,7 +13,7 @@ import com.capgemini.bankapp.model.BankAccount;
 import com.capgemini.bankapp.service.BankAccountService;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+
 public class BankAccountServiceImpl implements BankAccountService {
 
 	private BankAccountDao bankAccountDao;

@@ -15,7 +15,7 @@ import com.capgemini.bankapp.mapper.*;
 import org.springframework.transaction.annotation.Transactional;
 import com.capgemini.bankapp.exception.*;
 
-@Transactional
+
 public class BankAccountDaoImpl implements BankAccountDao {
 	
 	private JdbcTemplate jdbcTemplate;
