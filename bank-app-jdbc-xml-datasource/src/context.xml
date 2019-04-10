@@ -3,15 +3,12 @@
    xmlns:context="http://www.springframework.org/schema/context"
    xmlns:util="http://www.springframework.org/schema/util"
    xmlns:p="http://www.springframework.org/schema/p"
-   xmlns:tx="http://www.springframework.org/schema/tx"
    xsi:schemaLocation="http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/util
-	http://www.springframework.org/schema/util/spring-util.xsd
-	http://www.springframework.org/schema/tx
-	http://www.springframework.org/schema/tx/spring-tx.xsd">
+ 	http://www.springframework.org/schema/util/spring-util.xsd">
 
 
 	
@@ -22,23 +19,14 @@
   		<property name="password" value="root" />
 	</bean>
 	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
-		<property name="dataSource" ref="dataSource"></property>  
-	</bean>
 
 	<bean id = "bankAccountDaoImpl" class = "com.capgemini.bankapp.dao.impl.BankAccountDaoImpl">
-		<constructor-arg ref="jdbcTemplate"/>
+		<constructor-arg ref="dataSource"/>
 	</bean>
 
 	<bean id = "bankAccountServiceImpl" class = "com.capgemini.bankapp.service.impl.BankAccountServiceImpl">
 		<constructor-arg ref="bankAccountDaoImpl"/>
 	</bean>
-
-	<tx:annotation-driven transaction-manager="txManager"/>
-
-	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-       		 <property name="dataSource" ref="dataSource"/>
-        </bean>
 
 	<bean id = "bankAccount" class = "com.capgemini.bankapp.model.BankAccount" />
 		

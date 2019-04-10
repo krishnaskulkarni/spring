@@ -172,8 +172,8 @@ public class BankAccountClient {
 				System.out.println(account2.getAccountType());
 				System.out.println(account2.getAccountBalance());
 				
-			} catch (Exception e) {
-				//System.out.println(e.getMessage());
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 			break;
 			
@@ -185,14 +185,10 @@ public class BankAccountClient {
 			System.out.println("enter new account type");
 			newAccountType = reader.readLine();
 			
-			boolean result = bankService.updateAccountDetails(accountId, newAccountHolderName, newAccountType);
+			bankService.updateAccountDetails(accountId, newAccountHolderName, newAccountType);
 			
-			if(result)
-				System.out.println("successfully updated");
-			else
-				System.out.println("Account doesn't exist");
+			System.out.println("successfully updated");
 			break;
-
 			
 		case 10:	
 			System.out.println("thanks for banking with us");

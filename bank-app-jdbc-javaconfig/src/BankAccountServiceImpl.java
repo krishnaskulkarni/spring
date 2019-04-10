@@ -11,14 +11,13 @@ import com.capgemini.bankapp.exception.AccountNotFoundException;
 import com.capgemini.bankapp.exception.LowBalanceException;
 import com.capgemini.bankapp.model.BankAccount;
 import com.capgemini.bankapp.service.BankAccountService;
-import org.springframework.transaction.annotation.Transactional;
+import com.capgemini.bankapp.util.DbUtil;
 
-@Transactional
 public class BankAccountServiceImpl implements BankAccountService {
 
 	private BankAccountDao bankAccountDao;
 	
-	//Logger logger =Logger.getLogger(DbUtil.class);
+	Logger logger =Logger.getLogger(DbUtil.class);
 
 	public BankAccountServiceImpl(BankAccountDao bankAccountDao) {
 		this.bankAccountDao = bankAccountDao;
@@ -32,7 +31,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 			return balance;
 		throw new AccountNotFoundException("account doesnt exist");
 	}
-	
+
 	@Override
 	public double withdraw(long accountId, double amount) throws LowBalanceException, AccountNotFoundException {
 		double currentBalance = bankAccountDao.getBalance(accountId);
@@ -43,9 +42,10 @@ public class BankAccountServiceImpl implements BankAccountService {
 		if (currentBalance > amount) {
 			currentBalance = currentBalance - amount;
 			bankAccountDao.updateBalance(accountId, currentBalance);
-			//bankAccountDao.commit();
+			DbUtil.commit();
 			return currentBalance;
 		} else
+			
 			throw new LowBalanceException("insufficient balance");
 
 	}
@@ -62,6 +62,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 			bankAccountDao.updateBalance(accountId, currentBalance);
 			return currentBalance;
 		} else
+			
 			throw new LowBalanceException("insufficient balance");
 
 	}
@@ -74,16 +75,16 @@ public class BankAccountServiceImpl implements BankAccountService {
 			throw new AccountNotFoundException("account doesn't exist");
 		newBalance = bankAccountDao.getBalance(accountId) + amount;
 		bankAccountDao.updateBalance(accountId, newBalance);
-		//bankAccountDao.commit();
+		DbUtil.commit();
 		return newBalance;
 	}
-	
+
 	@Override
 	public boolean deleteBankAccount(long accountId) throws AccountNotFoundException {
 		
 		boolean result = bankAccountDao.deleteBankAccount(accountId);
 		if(result) {
-			//bankAccountDao.commit();
+			DbUtil.commit();
 			return result;
 		}else
 			throw new AccountNotFoundException("Account Doesn't exist");
@@ -92,7 +93,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 	@Override
 	public boolean addNewBankAccount(BankAccount account) {
 		boolean result = bankAccountDao.addNewBankAccount(account);
-		
+		if(result == true)
+			DbUtil.commit();
 		return result;
 	}
 
@@ -101,20 +103,19 @@ public class BankAccountServiceImpl implements BankAccountService {
 		
 		return bankAccountDao.displayAllAccounts();
 	}
-	
+
 	@Override
-	@Transactional(rollbackFor = AccountNotFoundException.class)
 	public double fundTransfer(long fromAccountId, long toAccountId, double amount) throws AccountNotFoundException,LowBalanceException {
 
 		try {
 			double newBalance = withdrawForFundTransfer(fromAccountId,amount);
 			deposit(toAccountId,amount);
-			//bankAccountDao.commit();
+			DbUtil.commit();
 			return newBalance;
 		} 
 		catch (LowBalanceException|AccountNotFoundException e) {
-			e.printStackTrace();
-			//bankAccountDao.rollback();
+			logger.error("Exception",e);
+			DbUtil.rollback();
 			throw e;
 		}
 		}
@@ -133,9 +134,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 	public boolean updateAccountDetails(long accountId, String newAccountHolderName, String newAccountType) {
 		
 		boolean result = bankAccountDao.updateAccountDetails(accountId, newAccountHolderName, newAccountType);
-		//if(result)
-			//bankAccountDao.commit();
-		
+		if(result)
+			DbUtil.commit();
 		return result;
 	}
 

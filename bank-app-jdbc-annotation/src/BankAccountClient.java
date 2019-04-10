@@ -20,7 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BankAccountClient {
 	
-	//static final Logger logger = Logger.getLogger(BankAccountClient.class);
+	static final Logger logger = Logger.getLogger(BankAccountClient.class);
 
 
 	public static void main(String[] args) throws AccountNotFoundException {
@@ -59,14 +59,7 @@ public class BankAccountClient {
 			System.out.println("Enter initial ammount");
 			accountBalance = Double.parseDouble(reader.readLine());
 			
-			BankAccount account = (BankAccount)context.getBean("bankAccount");
-			account.setAccountHolderName(accountHolderName);
-			account.setAccountType(accountType);
-			account.setAccountBalance(accountBalance);
-			
-
-			//new BankAccount(accountHolderName, accountType, accountBalance);
-
+			BankAccount account = new BankAccount(accountHolderName, accountType, accountBalance);
 			if(bankService.addNewBankAccount(account))
 				System.out.println("account created successfully");
 			else
@@ -82,11 +75,10 @@ public class BankAccountClient {
 			try {
 				System.out.println("current balance is "+bankService.withdraw(accountId, amount));
 			} catch (LowBalanceException e) {
-				 System.out.println(e.getMessage()); 
-				//logger.error("WITHDRAW FAILED",e);
+						/* System.out.println(e.getMessage()); */
+				logger.error("WITHDRAW FAILED",e);
 			} catch (AccountNotFoundException e) {
-				//logger.error(e.getMessage());
-				System.out.println(e.getMessage()); 
+				logger.error(e.getMessage());
 			}
 			break;
 			
@@ -97,9 +89,8 @@ public class BankAccountClient {
 			amount = Double.parseDouble(reader.readLine());
 			try {
 				System.out.println("current balance is "+bankService.deposit(accountId, amount));
-			} catch (AccountNotFoundException e) {
-				System.out.println(e.getMessage()); 
-				//logger.error(e1.getMessage());
+			} catch (AccountNotFoundException e1) {
+				logger.error(e1.getMessage());
 			}
 			
 			break;
@@ -110,9 +101,8 @@ public class BankAccountClient {
 			
 			try {
 				System.out.println("your account balance is "+bankService.checkBalance(accountId));
-			} catch (AccountNotFoundException e) {
-				System.out.println(e.getMessage()); 
-				//logger.error(e.getMessage());
+			} catch (AccountNotFoundException e1) {
+				logger.error(e1.getMessage());
 			}
 			break;
 			
@@ -145,8 +135,7 @@ public class BankAccountClient {
 			} catch (LowBalanceException e) {
 				System.out.println(e.getMessage());
 			} catch (AccountNotFoundException e) {
-				//logger.error(e.getMessage());
-				System.out.println(e.getMessage()); 
+				logger.error(e.getMessage());
 			}
 			
 			break;
@@ -172,8 +161,8 @@ public class BankAccountClient {
 				System.out.println(account2.getAccountType());
 				System.out.println(account2.getAccountBalance());
 				
-			} catch (Exception e) {
-				//System.out.println(e.getMessage());
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 			break;
 			
@@ -185,14 +174,10 @@ public class BankAccountClient {
 			System.out.println("enter new account type");
 			newAccountType = reader.readLine();
 			
-			boolean result = bankService.updateAccountDetails(accountId, newAccountHolderName, newAccountType);
+			bankService.updateAccountDetails(accountId, newAccountHolderName, newAccountType);
 			
-			if(result)
-				System.out.println("successfully updated");
-			else
-				System.out.println("Account doesn't exist");
+			System.out.println("successfully updated");
 			break;
-
 			
 		case 10:	
 			System.out.println("thanks for banking with us");
@@ -202,8 +187,8 @@ public class BankAccountClient {
 			}
 		
 		} catch (IOException e) {
-			e.printStackTrace();
-			//logger.error("EXCEPTION",e);
+			//e.printStackTrace();
+			logger.error("EXCEPTION",e);
 			
 		}
 		
