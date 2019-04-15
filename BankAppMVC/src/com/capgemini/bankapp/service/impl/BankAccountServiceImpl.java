@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.bankapp.dao.BankAccountDao;
@@ -13,6 +14,7 @@ import com.capgemini.bankapp.model.BankAccount;
 import com.capgemini.bankapp.service.BankAccountService;
 
 @Service
+@EnableTransactionManagement
 public class BankAccountServiceImpl implements BankAccountService {
 
 	private BankAccountDao bankAccountDao;
